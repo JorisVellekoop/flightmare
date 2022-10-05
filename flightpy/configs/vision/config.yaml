@@ -6,11 +6,11 @@ environment:
   max_detection_range: 10.0 # max obstacle detection range [m], obstacles outside this range will not be detected. The number of obstacles detected is fixed to 10, if less than 10 obstacles are within detectable range, the observation is padded with 10.0
 
 rewards:
-  vel_coeff: -0.001
-  ori_coeff: -0.001
-  collision_coeff: -0.1
+  vel_coeff: -0.01
+  ori_coeff: -0.01
+  collision_coeff: -0.01
   angular_vel_coeff: -0.0001
-  survive_rew: 0.003
+  survive_rew: 0.03
   names:  
     [
       "lin_vel_reward",
@@ -23,25 +23,26 @@ rewards:
 
 rgb_camera:
   on: yes 
-  stereo: yes
+  stereo: no
+  t_BC: [0.0, 0.0, 0.3]
   t_BC_left: [0.0, 0.05, 0.3] # translational vector of the camera with repect to the body frame
   t_BC_right: [0.0, -0.05, 0.3]
   r_BC: [0.0, 0.0, -90] # rotational angle (roll, pitch, yaw) of the camera in degree.
   channels: 3
-  width: 640
-  height: 480
+  width: 320
+  height: 240
   fov: 90.0
   enable_depth: yes 
   enable_segmentation: no
   enable_opticalflow: no
 
 unity:
-  scene_id: 1 # 0 warehouse, 1 street, 2 forest, 3 wasteland
+  scene_id: 0 # 0 warehouse, 1 street, 2 forest, 3 wasteland
   render: no 
 
 simulation:
   seed: 1
-  sim_dt: 0.01
+  sim_dt: 0.02
   max_t: 20.0
   num_envs: 100 
   num_threads: 10

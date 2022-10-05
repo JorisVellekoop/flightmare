@@ -62,16 +62,16 @@ void VisionEnv::init() {
 
   obstacle_cfg_path_ = getenv("FLIGHTMARE_PATH") +
                        std::string("/flightpy/configs/vision/") +
-                       difficulty_level_ + std::string("/") + env_folder_;
+                       env_folder_;
 
   // add dynamic objects
-  std::string dynamic_object_yaml =
-    obstacle_cfg_path_ + std::string("/dynamic_obstacles.yaml");
-  if (!configDynamicObjects(dynamic_object_yaml)) {
-    logger_.error(
-      "Cannot config Dynamic Object Yaml. Something wrong with the config "
-      "file");
-  }
+  // std::string dynamic_object_yaml =
+  //   obstacle_cfg_path_ + std::string("/dynamic_obstacles.yaml");
+  // if (!configDynamicObjects(dynamic_object_yaml)) {
+  //   logger_.error(
+  //     "Cannot config Dynamic Object Yaml. Something wrong with the config "
+  //     "file");
+  // }
 
   // add static objects
   static_object_csv_ =
@@ -131,11 +131,11 @@ bool VisionEnv::getObs(Ref<Vector<>> obs) {
   Vector<9> ori = Map<Vector<>>(quad_state_.R().data(), quad_state_.R().size());
 
   // get N most closest obstacles as the observation
-  Vector<visionenv::kNObstacles * visionenv::kNObstaclesState> obstacle_obs;
-  getObstacleState(obstacle_obs);
+  // Vector<visionenv::kNObstacles * visionenv::kNObstaclesState> obstacle_obs;
+  // getObstacleState(obstacle_obs);
 
   // Observations
-  obs << goal_linear_vel_, ori, quad_state_.v, obstacle_obs;
+  obs << goal_linear_vel_, ori, quad_state_.v; // obstacle_obs;
   return true;
 }
 
@@ -266,7 +266,7 @@ bool VisionEnv::step(const Ref<Vector<>> act, Ref<Vector<>> obs,
   quad_ptr_->getState(&quad_state_);
 
   // simulate dynamic obstacles
-  simDynamicObstacles(sim_dt_);
+  // simDynamicObstacles(sim_dt_);
 
   // update observations
   getObs(obs);
@@ -290,25 +290,25 @@ bool VisionEnv::computeReward(Ref<Vector<>> reward) {
   // ---------------------- reward function design
   // - compute collision penalty
   Scalar collision_penalty = 0.0;
-  size_t idx = 0;
-  for (size_t sort_idx : sort_indexes(relative_pos_norm_)) {
-    if (idx >= visionenv::kNObstacles) break;
+  // size_t idx = 0;
+  // for (size_t sort_idx : sort_indexes(relative_pos_norm_)) {
+  //   if (idx >= visionenv::kNObstacles) break;
 
-    Scalar relative_dist =
-      (relative_pos_norm_[sort_idx] > 0) &&
-          (relative_pos_norm_[sort_idx] < max_detection_range_)
-        ? relative_pos_norm_[sort_idx]
-        : max_detection_range_;
+  //   Scalar relative_dist =
+  //     (relative_pos_norm_[sort_idx] > 0) &&
+  //         (relative_pos_norm_[sort_idx] < max_detection_range_)
+  //       ? relative_pos_norm_[sort_idx]
+  //       : max_detection_range_;
 
-    const Scalar dist_margin = 0.5;
-    if (relative_pos_norm_[sort_idx] <=
-        obstacle_radius_[sort_idx] + dist_margin) {
-      // compute distance penalty
-      collision_penalty += collision_coeff_ * std::exp(-1.0 * relative_dist);
-    }
+  //   const Scalar dist_margin = 0.5;
+  //   if (relative_pos_norm_[sort_idx] <=
+  //       obstacle_radius_[sort_idx] + dist_margin) {
+  //     // compute distance penalty
+  //     collision_penalty += collision_coeff_ * std::exp(-1.0 * relative_dist);
+  //   }
 
-    idx += 1;
-  }
+  //   idx += 1;
+  // }
 
   // - tracking a constant linear velocity
   Scalar lin_vel_reward =
@@ -724,9 +724,9 @@ bool VisionEnv::addQuadrotorToUnity(const std::shared_ptr<UnityBridge> bridge) {
   if (!quad_ptr_) return false;
   bridge->addQuadrotor(quad_ptr_);
 
-  for (int i = 0; i < (int)dynamic_objects_.size(); i++) {
-    bridge->addDynamicObject(dynamic_objects_[i]);
-  }
+  // for (int i = 0; i < (int)dynamic_objects_.size(); i++) {
+  //   bridge->addDynamicObject(dynamic_objects_[i]);
+  // }
 
   //
   bridge->setRenderOffset(unity_render_offset_);
