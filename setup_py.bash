@@ -29,14 +29,14 @@ sudo apt install -y --no-install-recommends build-essential cmake libzmqpp-dev l
 #echo "Removing Trajectories zip file"
 #rm $project_path/flightmare/flightpy/configs/vision/trajectories.zip
 
-#echo "Downloading Flightmare Unity standalone..."
-#wget "https://download.ifi.uzh.ch/rpg/Flightmare/RPG_Flightmare.zip" --directory-prefix=$flightmare_path/flightrender
-#
-#echo "Unziping Flightmare Unity Standalone... (this might take a while)"
-#unzip -o $flightmare_path/flightrender/RPG_Flightmare.zip -d $flightmare_path/flightrender | awk 'BEGIN {ORS=" "} {if(NR%10==0)print "."}'
-#
-#echo "Removing Flightmare Unity Standalone zip file"
-#rm $flightmare_path/flightrender/RPG_Flightmare.zip
+echo "Downloading Flightmare Unity standalone..."
+wget "https://download.ifi.uzh.ch/rpg/Flightmare/RPG_Flightmare.zip" --directory-prefix=$flightmare_path/flightrender
+
+echo "Unziping Flightmare Unity Standalone... (this might take a while)"
+unzip -o $flightmare_path/flightrender/RPG_Flightmare.zip -d $flightmare_path/flightrender | awk 'BEGIN {ORS=" "} {if(NR%10==0)print "."}'
+
+echo "Removing Flightmare Unity Standalone zip file"
+rm $flightmare_path/flightrender/RPG_Flightmare.zip
 
 # 
 echo "export FLIGHTMARE_PATH=$flightmare_path" >> ~/.bashrc
@@ -64,10 +64,6 @@ pip install .
 echo "Install RPG baseline"
 cd $flightmare_path/flightpy/flightrl
 pip install .
-
-#echo "Run the first vision demo."
-#cd $project_path/envtest
-#python3 -m python.run_vision_demo --render 1
 
 echo "Done!"
 echo "Have a save flight!"

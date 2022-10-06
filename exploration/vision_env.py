@@ -101,7 +101,7 @@ def main():
         )
 
         #
-        model.learn(total_timesteps=int(5 * 1e6), log_interval=(10, 50))
+        model.learn(total_timesteps=int(1e7), log_interval=(10, 50))
     else:
         if args.render:
             proc = subprocess.Popen(os.environ["FLIGHTMARE_PATH"] + "/flightrender/RPG_Flightmare.x86_64")
